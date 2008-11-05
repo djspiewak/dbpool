@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="DBPool" default="build">
+	<target name="init">
+		<mkdir dir="bin"/>
+	</target>
+
+	<target name="build" depends="init">
+		<javac target="1.5" debug="yes" srcdir="src" destdir="bin"/>
+	</target>
+
+	<target name="clean">
+		<delete dir="bin"/>
+	</target>
+</project>
