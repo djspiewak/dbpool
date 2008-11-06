@@ -1,15 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+Ant buildfile for 'DBPool' library. Compatible with Ant version 1.3.
+-->
+<project name="DBPool" default="jar">
+	<property file="build.properties"/> 
 
-<project name="DBPool" default="build">
-	<target name="init">
-		<mkdir dir="bin"/>
+		<!-- The build targets begin here -->
+	    <target depends="" name="clean" description="Erase the deployment tree">
+	        <delete dir="${build.dir}"/>
+	        <delete dir="${dist.dir}"/>
+	        <delete dir="${build.javadoc.dir}"/>
+	    </target>
+	
+	 	<target depends="" name="prepare" description="Create the target directories">
+	        <mkdir dir="${build.dir}"/>
+	        <mkdir dir="${dist.dir}/jar"/>
+	 		<mkdir dir="${build.javadoc.dir}"/>
+	    </target>
+
+	 <target depends="" name="javadoc" description="Build the JavaDoc documentation" >
+	        <mkdir dir="${build.javadoc.dir}"/>
+	        <delete includeEmptyDirs="yes">
+	            <fileset dir="${build.javadoc.dir}" includes="**/*" />
+	        </delete>
+	        <javadoc author="true"
+	                destdir="${build.javadoc.dir}"
+	                doctitle="DBPool"
+	                packagenames="snaq.*"
+	                sourcepath="${src.dir}"
+	                version="true"
+	                windowtitle="DBPool"
+	                use="${javadoc.use}">
+	        </javadoc>
+	    </target>
+
+	<target depends="clean, prepare" name="compile" description="Compile Java source files">
+	        <mkdir dir="${build.classes.dir}"/>
+			<javac 	srcdir="${src.dir}" 
+				destdir="${build.classes.dir}" 
+				classpath="${build.classpath}" 
+				debug="${build.debug}" 
+				target="1.5" 
+				source="1.5"> 
+	        </javac>
 	</target>
 
-	<target name="build" depends="init">
-		<javac target="1.5" debug="yes" srcdir="src" destdir="bin"/>
-	</target>
+	<target depends="compile" name="jar" description="Create the WUFUHusk.jar">
+		<copy todir="${dist.dir}/jar">
+		<fileset dir="${build.classes.dir}">
+			<include name="**/*.class"/>
+		</fileset>
+		</copy>
+			
+	        <jar basedir="${dist.dir}/jar" jarfile="${dist.dir}/DBPool_v${app.version}.jar">
+	            <manifest>
+	                <attribute name="Specification-Title" value="DBPool" />
+					<attribute name="Implementation-Vendor" value="git://github.com/djspiewak/dbpool.git"/>
+	            </manifest>
+	       </jar>
+		
+		<delete dir="${dist.dir}/jar"/>
 
-	<target name="clean">
-		<delete dir="bin"/>
-	</target>
+	    </target>
+
 </project>
